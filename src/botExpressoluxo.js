@@ -1,16 +1,17 @@
 import { create, Whatsapp } from "venom-bot";
 import fs from "fs";
+import moment from "moment/moment.js";
 import path from "path";
-import dialogocl2 from "./dialogs/dialogocl2.js";
-import dialogo1 from "./dialogs/dialogo1.js";
+import dialogoinicio from "./dialogs/dialogoinicio.js";
 import dialogo2 from "./dialogs/dialogo2.js";
-import dialogo3 from "./dialogs/dialogo3.js";
-import dialogo4 from "./dialogs/dialogo4.js";
-import dialogo5 from "./dialogs/dialogo5.js";
-import dialogo6 from "./dialogs/dialogo6.js";
+import dialogoValor from "./dialogs/dialogoValor.js";
+import dialogoPassagem from "./dialogs/dialogoPassagem.js";
+import dialogocomprar from "./dialogs/dialogocomprar.js";
+import dialogoatendente from "./dialogs/dialogoatendente.js";
 import dialogoencerra from "./dialogs/dialogoencerra.js";
-const promo = fs.readFileSync("./imagens/promo.PNG");
-const pizza = JSON.parse(fs.readFileSync("pizzabella.json", "utf8"));
+import dialogoError from "./dialogs/dialogoError.js";
+//import dialogo6 from "./dialogs/dialogo6.js";
+const date = new Date();
 
 function start(client) {
   console.log("Cliente Venom iniciado!");
@@ -57,8 +58,10 @@ function start(client) {
         atendimento[tel] = {
           tel: tel,
           cliente: null,
-          numeroPizza: null,
-          end: null,
+          passagem: null,
+          dataida: null,
+          comprar: null,
+          destino: null,
           stage: stage, // Define em qual Else if o cliente esta. Controla a msg
         };
         console.log("New atendimento entry created:", atendimento[tel]);
@@ -66,104 +69,75 @@ function start(client) {
       console.log(message);
       //  ---------- Inicio da conversa
       if (message.body && atendimento[tel].stage === 1) {
-        dialogo1(client, message);
+        dialogoinicio(client, message);
         atendimento[tel].stage = 2;
       }
-      //  -------------------- Envia cardapio
+      //  -------------------- Envia o os horarios de onibus
       else if (message.body === "1" && atendimento[tel].stage === 2) {
         dialogo2(client, message);
-      }
-      //  -------------------- Envia as promoções
-      else if (message.body === "2" && atendimento[tel].stage === 2) {
-        client
-          .sendImage(
-            message.from,
-            "./imagens/promo.png",
-            "image-name",
-            "Promoção da semana"
-          )
-          .then((result) => {
-            console.log("Result: ", result); //return object success
-          })
-          .catch((erro) => {
-            console.error("Error when sending: ", erro); //return object error
-          });
-      }
-      //  -------------------- Faz o pedido
-      else if (message.body === "3" && atendimento[tel].stage === 2) {
-        dialogo3(client, message);
         atendimento[tel].stage = 3;
       }
-      //  -------------------- Faz abertura para atendimento
-      else if (message.body === "4" && atendimento[tel].stage === 2) {
-        dialogocl2(client, message);
-      } else if (message.body && atendimento[tel].stage === 3) {
-        atendimento.cliente = message.body;
-        dialogo4(client, message);
-        atendimento[tel].stage = 4;
-      } else if (message.body && atendimento[tel].stage === 4) {
-        // Recebe numero da pizza e envia dialogo de endereço
-        atendimento.numeroPizza = message.body;
-        //pergunta o endereço
-        dialogo5(client, message);
+      //  -------------------- Envia os Valores
+      else if (message.body === "2" && atendimento[tel].stage === 2) {
+        dialogoValor(client, message);
         atendimento[tel].stage = 5;
       }
-
-      // ----------Encerra atendimento
+      //  -------------------- Faz a pergunta da data
+      else if (message.body === "3" && atendimento[tel].stage === 2) {
+      dialogo2(client, message);
+      atendimento[tel].stage = 5;
+        }
+      // -------------------- Joga o link pra compra
+      //else if (message.body === "3" && atendimento[tel].stage === 2) {
+      //  dialogoPassagem(client, message);
+       // atendimento[tel].stage = 4;
+     // }
+      //  -------------------- Faz abertura para aluguel
+      else if (message.body === "4" && atendimento[tel].stage === 2) {
+        dialogoatendente(client, message);
+      }
+      // Cria link de pesquisa pra o cliente
+      else if (message.body && atendimento[tel].stage === 3) {
+        dialogoPassagem(client, message);
+      }
+      // Cria link de pesquisa de compra para o cliente
+      else if (message.body && atendimento[tel].stage === 5) {
+        atendimento.comprar= message.body
+        dialogocomprar(client, message);
+        atendimento.stage = 20
+      }
+      // ---------- manda pro suporte
       else if (message.body === "5" && atendimento[tel].stage === 2) {
         atendimento.end = message.body;
+        dialogoatendente(client, message);
+        atendimento[tel].stage = 6;
+        //manda pro administrativo
+      } else if (message.body === "6" && atendimento[tel].stage === 2) {
+        atendimento.end = message.body;
+        dialogoatendente(client, message);
+        atendimento[tel].stage = 7;
         //encerra o atendimento
+      } else if (message.body === "7" && atendimento[tel].stage === 2) {
+        atendimento.end = message.body;
         dialogoencerra(client, message);
-        atendimento[tel].stage = 16;
+        atendimento[tel].stage = 8;
       }
 
-      // ---------------- Salva no Json -----------------
-      else if (message.body && atendimento[tel].stage === 5) {
-        atendimento.end = message.body;
-
-        const cliente = atendimento.cliente;
-        const numeroPizza = atendimento.numeroPizza;
-        const end = atendimento.end;
-
-        // Envia a mensagem de texto primeiro
-        const textomensagem = `Agora ${cliente} confirme o seu pedido:\n\nNumero da Pizza: ${numeroPizza}\nEndereço: ${end}\nSe estiver correto digite 1 se não digite 2`;
+      // ---------------- joga o link pra comprar passagem-----------------
+      else if (message.body === "1" && atendimento[tel].stage === 4) {
+        atendimento[tel].passagem = message.body;
+        const textomensagem =
+          "Acesse o link para efetuar a compra da sua passagem:\nhttps://www.buson.com.br/viacao/expresso-de-luxo-mg";
         client
           .sendText(message.from, textomensagem)
           .then(() => {
-            console.log("Message sent.");
-          })
-          .catch((error) => {
-            console.error("Erro ao enviar a mensagem.", error);
-          });
-
-        atendimento[tel].stage = 12;
-      } else if (message.body === "1" && atendimento[tel].stage === 12) {
-        //confirma e envia para o atendente ou resenta o estagio
-        atendimento[tel].stage = 18;
-        // Crie um objeto temporário contendo apenas as propriedades que têm valores
-        const tempObj = {
-          tel: message.from,
-          cliente: atendimento.cliente,
-          numeroPizza: atendimento.numeroPizza,
-          end: atendimento.end,
-          stage: atendimento.stage,
-        };
-
-        salvaContato(tempObj); // Passe o objeto temporário para a função salvaContato
-        client
-          .sendText(
-            message.from,
-            "Perfeito, O seu pedido já esta em produção com muito carinho e amor e so aguardar.❤",
-            { quotedMessage: message, waitForAck: true }
-          )
-          .then(() => {
-            console.log("Message sent.");
+            console.log("Messagem.");
           })
           .catch((error) => {
             console.error("Error when sending message", error);
           });
+        atendimento[tel].stage = 1;
       }
-
       // ------------------ Ajustes do pedido -----------------
       else if (message.body === "2" && atendimento[tel].stage === 12) {
         // Pergunta o que esta errado
@@ -180,15 +154,15 @@ function start(client) {
         atendimento[tel].stage = 10;
       } else if (message.body === "7" && atendimento[tel].stage === 10) {
         // chama função de preenchimento do nome
-        dialogo3(client, message);
+        dialogoValor(client, message);
         atendimento[tel].stage = 11;
       } else if (message.body === "8" && atendimento[tel].stage === 10) {
-        // Altera Pedido numero da Pizza
-        dialogo4(client, message);
+        // Chama o atendimento
+        dialogoatendente(client, message);
         atendimento[tel].stage = 13;
         //Altera o cep
       } else if (message.body === "9" && atendimento[tel].stage === 10) {
-        dialogo5(client, message);
+        dialogosup(client, message);
         atendimento[tel].stage = 5;
       } else if (message.body && atendimento[tel].stage === 11) {
         atendimento.cliente = message.body;
@@ -198,7 +172,7 @@ function start(client) {
         const end = atendimento.end;
 
         //  Envia a mensagem de texto primeiro
-        const textomensagem = `Agora ${cliente} confirme o seu pedido:\n\nNumero da Pizza: ${numeroPizza}\nEndereço: ${end}\nSe estiver correto digite 1 se não digite 2`;
+        const textomensagem = `Se deseja comprar apenas uma passagem digite *1*\nSe deseja comprar um Pacote de Passagens *digite 2`;
         client
           .sendText(message.from, textomensagem)
           .then(() => {

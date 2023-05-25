@@ -1,14 +1,15 @@
 {
-  "name": "botbellapizza",
+  "name": "botExpressoluxo",
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "node src/server.js",
-    "start": "nodemon src/botBellaPizza.js"
+    "start": "nodemon src/botExpressoluxo.js"
   },
   "dependencies": {
+    "moment": "^2.29.4",
     "nodemon": "^2.0.22",
     "venom-bot": "^5.0.1"
   }

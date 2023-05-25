@@ -1,6 +1,6 @@
 async function dialogoencerra(client, message) {
   const texto =
-    "Agradeço a preferencia, precisando e so entrar em contato novamente.❤ ";
+    "Agradeçemos a preferencia, precisando e so entrar em contato novamente.❤ ";
   await client
     .sendText(message.from, texto)
     .then(() => {

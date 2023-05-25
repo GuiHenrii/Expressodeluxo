@@ -1,7 +1,6 @@
-async function dialogo6(client, message) {
-  const texto =
-    "*Vamos dar inicio ao seu atendimento*\n\nInforme por favor o seu nome!";
-  await client
+async function dialogoError (client, message) {
+  const texto = "Desculpe, algo deu errado. Por favor, reinicie o processo.";
+  client
     .sendText(message.from, texto)
     .then(() => {
       console.log("Mensagem enviada");
@@ -9,5 +8,6 @@ async function dialogo6(client, message) {
     .catch((error) => {
       console.error("Erro ao enviar mensagem", error);
     });
-}
-export default dialogo6;
+  };
+
+export default dialogoError;
