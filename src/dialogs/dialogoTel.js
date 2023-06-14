@@ -1,6 +1,6 @@
-async function dialogoencerra(client, message) {
+async function dialogoTel(client, message) {
   const texto =
-    "Agradeçemos a preferencia, precisando e so entrar em contato novamente. ";
+    "*Informe seu numero de contato:*";
   await client
     .sendText(message.from, texto)
     .then(() => {
@@ -10,5 +10,4 @@ async function dialogoencerra(client, message) {
       console.error("Erro ao enviar mensagem", error);
     });
 }
-
-export default dialogoencerra;
+export default dialogoTel;

@@ -1,7 +1,8 @@
 async function dialogoatendente(client, message) {
-  const texto = "Certo, o seu atendimento já esta na fila e logo logo o atendente dará continuidade."
+  const texto =
+    "*Certo, de agora pra frente o atendente vai atender você, só um instante por favor.*";
   await client
-    .sendText(message.from, texto,)
+    .sendText(message.from, texto)
     .then(() => {
       console.log("Mensagem enviada.");
     })
