@@ -1,0 +1,110 @@
+[
+{
+  "id": 49,
+  "name": "Bordas Chocolate ao Leite / Chocolate Branco / Cheddar",
+  "pedacos4": 12,
+  "pedacos8": 0
+},
+{
+  "id": 50,
+  "name": "Chocolate Branco",
+  "pedacos4": 12,
+  "pedacos8": 0
+},
+{
+  "id": 51,
+  "name": "Cheddar",
+  "pedacos4": 12,
+  "pedacos8": 0
+},
+
+{
+  "id": 52,
+  "name": "Bordas Catupiry",
+  "pedacos4": 14,
+  "pedacos8": 0
+},
+{
+  "id": 53,
+  "name": "Cream Cheese",
+  "pedacos4": 14,
+  "pedacos8": 0
+},{
+  "id": 54,
+  "name": "Mussarela",
+  "pedacos4": 14,
+  "pedacos8": 0
+},
+{
+  "id": 55,
+  "name": "Bordas Quatro Queijos",
+  "pedacos4": "16,90",
+  "pedacos8": "16,90"
+},
+{
+  "id": 56,
+  "name": "Presunto e Mussarela",
+  "pedacos4": "16,90",
+  "pedacos8": "16,90"
+},
+{
+  "id": 57,
+  "name": "Ovo",
+  "pedacos4": 3,
+  "pedacos8": 0
+},
+{
+  "id": 58,
+  "name": "Milho",
+  "pedacos4": 3,
+  "pedacos8": 0
+},
+{
+  "id": 59,
+  "name": "Batata Palha",
+  "pedacos4": 5,
+  "pedacos8": 0
+},
+{
+  "id": 60,
+  "name": "Presunto",
+  "pedacos4": 8,
+  "pedacos8": 0
+},
+{
+  "id": 61,
+  "name": "Frango",
+  "pedacos4": 10,
+  "pedacos8": 0
+},
+{
+  "id": 62,
+  "name": "Calabresa",
+  "pedacos4": "10",
+  "pedacos8": 0
+},
+{
+  "id": 63,
+  "name": "Bacon",
+  "pedacos4": 10,
+  "pedacos8": 0
+},
+{
+  "id": 64,
+  "name": "Catupiry",
+  "pedacos4": 12,
+  "pedacos8": 0
+},
+{
+  "id": 65,
+  "name": "Cheddar",
+  "pedacos4": 10,
+  "pedacos8": 0
+},
+{
+  "id": 66,
+  "name": "Palmito",
+  "pedacos4": 15,
+  "pedacos8": 0
+}
+]
